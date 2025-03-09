@@ -1,0 +1,28 @@
+21:28:34 **** Incremental Build of configuration Debug for project work ****
+make -j6 all 
+arm-none-eabi-gcc "../Core/Src/work.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F446xx -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/work.d" -MT"Core/Src/work.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/work.o"
+../Core/Src/work.c: In function 'InitWork':
+../Core/Src/work.c:47:9: warning: implicit declaration of function 'InitRfidWork'; did you mean 'InitRfIdWork'? [-Wimplicit-function-declaration]
+   47 |         InitRfidWork();
+      |         ^~~~~~~~~~~~
+      |         InitRfIdWork
+arm-none-eabi-gcc -o "work.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\can\stm32_code\code-f446\work\STM32F446RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="work.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: work.elf
+ 
+arm-none-eabi-size  work.elf 
+arm-none-eabi-objdump -h -S work.elf  > "work.list"
+   text	   data	    bss	    dec	    hex	filename
+  36524	    108	   3364	  39996	   9c3c	work.elf
+arm-none-eabi-objcopy  -O ihex work.elf  "work.hex"
+Finished building: default.size.stdout
+arm-none-eabi-objcopy  -O binary work.elf  "work.bin"
+ 
+Finished building: work.hex
+ 
+Finished building: work.list
+Finished building: work.bin
+ 
+ 
+
+21:28:38 Build Finished. 0 errors, 1 warnings. (took 3s.86ms)
+

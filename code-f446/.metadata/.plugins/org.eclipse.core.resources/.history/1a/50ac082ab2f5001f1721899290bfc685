@@ -1,0 +1,20 @@
+/*
+ * thermo_dht11.h
+ *
+ *  Created on: Feb 28, 2025
+ *      Author: user
+ */
+
+#ifndef INC_THERMO_DHT11_H_
+#define INC_THERMO_DHT11_H_
+
+#include "basic.h"
+
+extern uint8_t Rh_byte1, Rh_byte2, Temp_byte1, Temp_byte2;
+extern uint16_t humidity = 0, temperature = 0;
+
+
+void InitThermoWork();
+void DoThermoWork();
+
+#endif /* INC_THERMO_DHT11_H_ */

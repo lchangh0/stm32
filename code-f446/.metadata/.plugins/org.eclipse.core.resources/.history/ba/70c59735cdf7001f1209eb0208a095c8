@@ -1,0 +1,201 @@
+/*
+ * rfid-pn532-spi.c
+ *
+ *  Created on: Mar 3, 2025
+ *      Author: user
+ */
+
+#include "rfid-pn532-spi.h"
+
+// NSS 핀 제어 매크로
+#define PN532_NSS_LOW()  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8, GPIO_PIN_RESET)
+#define PN532_NSS_HIGH() HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8, GPIO_PIN_SET)
+
+
+// PN532 명령어 정의
+#define PN532_COMMAND_GETFIRMWAREVERSION 0x02
+#define PN532_COMMAND_SAMCONFIGURATION   0x14
+#define PN532_COMMAND_INLISTPASSIVETARGET 0x4A
+#define PN532_SPI_DATAWRITE             0x01
+#define PN532_SPI_DATAREAD              0x03
+#define PN532_SPI_STATUSREAD            0x02
+
+// 함수 선언
+void PN532_SPI_Write(uint8_t *data, uint8_t len);
+void PN532_SPI_Read(uint8_t *buffer, uint8_t len);
+uint8_t PN532_SPI_Status(void);
+void PN532_SendCommand(uint8_t *cmd, uint8_t cmd_len);
+uint32_t PN532_GetFirmwareVersion(void);
+void PN532_SAMConfig(void);
+void PN532_ReadPassiveTarget(uint8_t *uid, uint8_t *uid_len);
+
+
+// SPI 데이터 쓰기
+void PN532_SPI_Write(uint8_t *data, uint8_t len) {
+  PN532_NSS_LOW();
+  HAL_SPI_Transmit(&hspi1, data, len, HAL_MAX_DELAY);
+  PN532_NSS_HIGH();
+}
+
+// SPI 데이터 읽기
+void PN532_SPI_Read(uint8_t *buffer, uint8_t len) {
+  PN532_NSS_LOW();
+  uint8_t cmd = PN532_SPI_DATAREAD;
+  HAL_SPI_Transmit(&hspi1, &cmd, 1, HAL_MAX_DELAY);
+  uint8_t status = HAL_SPI_Receive(&hspi1, buffer, len, HAL_MAX_DELAY);
+  PN532_NSS_HIGH();
+
+  printf("read status:%02X\n", status);
+  for(int i = 0; i < len; i++)
+	  printf("%02X ", buffer[i]);
+  printf("\n");
+
+}
+
+// SPI 상태 읽기
+uint8_t PN532_SPI_Status(void) {
+  PN532_NSS_LOW();
+  uint8_t cmd = PN532_SPI_STATUSREAD;
+  uint8_t status;
+  HAL_SPI_Transmit(&hspi1, &cmd, 1, HAL_MAX_DELAY);
+  HAL_SPI_Receive(&hspi1, &status, 1, HAL_MAX_DELAY);
+  PN532_NSS_HIGH();
+  return status;
+}
+
+// PN532 명령어 전송
+void PN532_SendCommand(uint8_t *cmd, uint8_t cmd_len) {
+  uint8_t packet[64];
+  uint8_t i = 0;
+
+  packet[i++] = 0x01;
+
+  // 프레임 시작
+  packet[i++] = 0x00;
+  packet[i++] = 0x00;
+  packet[i++] = 0xFF;
+
+  // 길이
+  packet[i++] = cmd_len + 1; // LEN
+  packet[i++] = ~(cmd_len + 1) + 1; // LCS
+
+  // 데이터
+  packet[i++] = 0xD4; // TFI (Host -> PN532)
+  for (uint8_t j = 0; j < cmd_len; j++) {
+    packet[i++] = cmd[j];
+  }
+
+  // 체크섬
+  uint8_t checksum = 0xD4;
+  for (uint8_t j = 0; j < cmd_len; j++) {
+    checksum += cmd[j];
+  }
+  packet[i++] = ~checksum + 1;
+
+  // 프레임 끝
+  packet[i++] = 0x00;
+
+
+  printf("write: ");
+  for(int n = 0; n < i; n++)
+	  printf("%02X ", packet[i]);
+  printf("\n");
+
+
+  PN532_SPI_Write(packet, i);
+
+  //// ACK 대기
+  //uint16_t timeout = 1000;
+  //while (!(PN532_SPI_Status() & 0x01) && timeout--) {
+  //  HAL_Delay(1);
+  //}
+
+  HAL_Delay(10);
+
+}
+
+
+// 펌웨어 버전 읽기
+uint32_t PN532_GetFirmwareVersion(void) {
+  uint8_t cmd = PN532_COMMAND_GETFIRMWAREVERSION;
+  PN532_SendCommand(&cmd, 1);
+
+  uint8_t response[12];
+  PN532_SPI_Read(response, 12);
+
+  if (response[5] != 0xD5 || response[6] != (cmd + 1)) {
+    return 0;
+  }
+
+  uint32_t version = (response[7] << 24) | (response[8] << 16) |
+                     (response[9] << 8) | response[10];
+
+  printf("version:%ld\n", version);
+  return version;
+}
+
+
+// SAM 설정
+void PN532_SAMConfig(void) {
+  uint8_t cmd[3] = {PN532_COMMAND_SAMCONFIGURATION, 0x01, 0x01};
+  PN532_SendCommand(cmd, 3);
+
+  uint8_t response[10];
+  PN532_SPI_Read(response, 10);
+}
+
+// 수동 타겟 읽기
+void PN532_ReadPassiveTarget(uint8_t *uid, uint8_t *uid_len) {
+  uint8_t cmd[2] = {PN532_COMMAND_INLISTPASSIVETARGET, 0x01}; // 1개의 ISO14443A 타겟
+  PN532_SendCommand(cmd, 2);
+
+  uint8_t response[20];
+  PN532_SPI_Read(response, 20);
+
+  if (response[5] == 0xD5 && response[6] == (PN532_COMMAND_INLISTPASSIVETARGET + 1) && response[7] == 0x01) {
+    *uid_len = response[12]; // UID 길이
+    for (uint8_t i = 0; i < *uid_len; i++) {
+      uid[i] = response[13 + i];
+    }
+  } else {
+    *uid_len = 0;
+  }
+}
+
+
+void InitRfidWorkSpi()
+{
+	// PN532 초기화
+	  PN532_NSS_HIGH();
+	  HAL_Delay(100);
+
+	  // 펌웨어 버전 확인
+	  uint32_t version = PN532_GetFirmwareVersion();
+	  if (version == 0) {
+	    printf("PN532 모듈을 찾지 못함\n");
+	    return;
+	  }
+
+	  // SAM 설정
+	  PN532_SAMConfig();
+}
+
+
+uint8_t uid[7]; // UID 저장 버퍼 (최대 7바이트)
+uint8_t uid_len = 0;
+static uint32_t tm_rfid_spi;
+
+
+void DoRfidWorkSpi()
+{
+	if (GetElapsedTick(tm_rfid_spi) >= 2000)
+	{
+		tm_rfid_spi = GetTick();
+
+		PN532_ReadPassiveTarget(uid, &uid_len);
+		if (uid_len > 0) {
+		  // UID가 읽힌 경우 처리 (예: UART로 출력)
+		  printf("UID Detected\n");
+		}
+	}
+}

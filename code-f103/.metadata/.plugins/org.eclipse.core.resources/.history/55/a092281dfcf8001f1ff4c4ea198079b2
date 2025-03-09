@@ -1,0 +1,44 @@
+/*
+ * spi1.c
+ *
+ *  Created on: Mar 4, 2025
+ *      Author: user
+ */
+
+#include "spi1.h"
+
+#define SPI_BUFFER_SIZE 10
+
+uint8_t spiRx;
+
+void InitSpi1Work()
+{
+	HAL_SPI_Receive_IT(&hspi1, &spiRx, 1);
+}
+
+
+uint8_t spi_rx_buff[128];
+uint8_t spi_rx_ridx;
+uint8_t spi_rx_widx;
+
+void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *hspi) {
+    if (hspi->Instance == SPI1) {
+
+    	spi_rx_buff[spi_rx_widx] = spiRx;
+    	spi_rx_widx = (spi_rx_widx + 1) % sizeof(spi_rx_buff);
+
+        HAL_SPI_Receive_IT(&hspi1, &spiRx, 1); // 계속 수신 대기
+    }
+}
+
+
+void DoSpi1Work()
+{
+	if (spi_rx_ridx != spi_rx_widx)
+	{
+		uint8_t rx = spi_rx_buff[spi_rx_ridx];
+		spi_rx_ridx = (spi_rx_ridx + 1) % sizeof(spi_rx_buff);
+
+
+	}
+}

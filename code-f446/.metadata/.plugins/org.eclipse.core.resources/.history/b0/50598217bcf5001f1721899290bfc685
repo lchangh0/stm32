@@ -1,0 +1,138 @@
+/*
+ * thermo_dht11.c
+ *
+ *  Created on: Feb 28, 2025
+ *      Author: user
+ */
+
+#include "thermo_dht11.h"
+
+
+// DHT11 핀 설정 (예: PC12 사용)
+#define DHT11_PORT GPIOC
+#define DHT11_PIN GPIO_PIN_12
+
+// DHT11 데이터 저장용 배열
+uint8_t Rh_byte1, Rh_byte2, Temp_byte1, Temp_byte2;
+uint16_t humidity = 0, temperature = 0;
+uint8_t Presence = 0;
+
+// 마이크로초 단위 딜레이 함수
+void delay_us(uint16_t us)
+{
+    //__HAL_TIM_SET_COUNTER(&htim1, 0);
+    //while (__HAL_TIM_GET_COUNTER(&htim1) < us);
+	DelayUS(us);
+}
+
+// GPIO 출력 모드 설정
+void set_gpio_output(void)
+{
+    GPIO_InitTypeDef GPIO_InitStruct = {0};
+    GPIO_InitStruct.Pin = DHT11_PIN;
+    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
+    //GPIO_InitStruct.Pull = GPIO_NOPULL;
+    //GPIO_InitStruct.Pull = GPIO_PULLUP;
+    //GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+    HAL_GPIO_Init(DHT11_PORT, &GPIO_InitStruct);
+}
+
+// GPIO 입력 모드 설정
+void set_gpio_input(void)
+{
+    GPIO_InitTypeDef GPIO_InitStruct = {0};
+    GPIO_InitStruct.Pin = DHT11_PIN;
+    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+    //GPIO_InitStruct.Pull = GPIO_NOPULL;
+    //GPIO_InitStruct.Pull = GPIO_PULLUP;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+    HAL_GPIO_Init(DHT11_PORT, &GPIO_InitStruct);
+}
+
+
+// DHT11 시작 신호
+void DHT11_start(void)
+{
+    set_gpio_output();
+    HAL_GPIO_WritePin(DHT11_PORT, DHT11_PIN, 0); // LOW로 설정
+    HAL_Delay(18);                               // 18ms 대기
+    HAL_GPIO_WritePin(DHT11_PORT, DHT11_PIN, 1); // HIGH로 설정
+    delay_us(20);                                // 20us 대기
+    set_gpio_input();
+}
+
+// 응답 확인
+uint8_t check_response(void)
+{
+    delay_us(40);
+
+    if (HAL_GPIO_ReadPin(DHT11_PORT, DHT11_PIN))
+    {
+    	return 0;	// 응답없음
+    }
+
+	delay_us(80);
+	if (!HAL_GPIO_ReadPin(DHT11_PORT, DHT11_PIN))
+		return 0;	// 응답없음
+
+	return 1;
+}
+
+// 데이터 읽기
+uint8_t read_data(void)
+{
+    uint8_t i, j;
+    for (j = 0; j < 8; j++)
+    {
+        while (!(HAL_GPIO_ReadPin(DHT11_PORT, DHT11_PIN))); // HIGH 대기
+        delay_us(40);
+        if (!(HAL_GPIO_ReadPin(DHT11_PORT, DHT11_PIN)))     // 40us 후 LOW면 0
+            i &= ~(1 << (7 - j));
+        else                                               // HIGH면 1
+            i |= (1 << (7 - j));
+        while (HAL_GPIO_ReadPin(DHT11_PORT, DHT11_PIN));    // 다음 비트 대기
+    }
+    return i;
+}
+
+// 메인 DHT11 읽기 함수
+void DHT11_read(void)
+{
+    DHT11_start();
+    Presence = check_response();
+
+    if (Presence)
+    {
+        Rh_byte1 = read_data();    // 습도 정수 부분
+        Rh_byte2 = read_data();    // 습도 소수 부분
+        Temp_byte1 = read_data();  // 온도 정수 부분
+        Temp_byte2 = read_data();  // 온도 소수 부분
+        uint8_t sum = read_data(); // 체크섬
+
+        if (sum == (Rh_byte1 + Rh_byte2 + Temp_byte1 + Temp_byte2))
+        {
+            humidity = (Rh_byte1 << 8) | Rh_byte2;
+            temperature = (Temp_byte1 << 8) | Temp_byte2;
+        }
+    }
+}
+
+
+void InitThermoWork()
+{
+	HAL_GPIO_WritePin(DHT11_PORT, DHT11_PIN, 1); // HIGH로 설정
+	DelayMS(1000);
+}
+
+static uint32_t tm_thermo;
+
+void DoThermoWork()
+{
+	if (GetElapsedTick(tm_thermo) >= 1000)
+	{
+		tm_thermo = GetTick();
+
+		DHT11_read();
+	}
+}

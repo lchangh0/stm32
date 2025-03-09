@@ -1,0 +1,20 @@
+/*
+ * lcd_st7789v.c
+ *
+ *  Created on: Mar 2, 2025
+ *      Author: user
+ */
+
+#include "lcd_st7789v.h"
+
+
+
+
+
+void InitLcdWork()
+{
+}
+
+void DoLcdWork()
+{
+}

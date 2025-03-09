@@ -1,0 +1,28 @@
+/*
+ * lcd_st7789v.c
+ *
+ *  Created on: Mar 2, 2025
+ *      Author: user
+ */
+
+#include "lcd_st7789v.h"
+
+
+// ST7789V 핀 정의
+#define ST7789_CS_PIN    GPIO_PIN_5
+#define ST7789_CS_PORT   GPIOC
+#define ST7789_DC_PIN    GPIO_PIN_8
+#define ST7789_DC_PORT   GPIOC
+#define ST7789_RST_PIN   GPIO_PIN_6
+#define ST7789_RST_PORT  GPIOC
+
+
+
+
+void InitLcdWork()
+{
+}
+
+void DoLcdWork()
+{
+}

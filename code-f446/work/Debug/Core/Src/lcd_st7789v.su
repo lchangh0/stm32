@@ -1,0 +1,7 @@
+../Core/Src/lcd_st7789v.c:39:6:ST7789_SendCommand	16	static
+../Core/Src/lcd_st7789v.c:46:6:ST7789_SendData	16	static
+../Core/Src/lcd_st7789v.c:54:6:ST7789_Init	16	static
+../Core/Src/lcd_st7789v.c:87:6:ST7789_SetWindow	32	static
+../Core/Src/lcd_st7789v.c:108:6:ST7789_FillColor	32	static
+../Core/Src/lcd_st7789v.c:123:6:InitLcdWork	8	static
+../Core/Src/lcd_st7789v.c:129:6:DoLcdWork	4	static

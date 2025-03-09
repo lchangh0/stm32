@@ -1,0 +1,12 @@
+../Core/Src/rfid_pn532.c:56:5:PN532_Reset	8	static
+../Core/Src/rfid_pn532.c:66:6:PN532_Log	16	static
+../Core/Src/rfid_pn532.c:70:6:PN532_Init	16	static
+../Core/Src/rfid_pn532.c:79:9:reverse_bit	24	static
+../Core/Src/rfid_pn532.c:89:6:spi_rw	24	static
+../Core/Src/rfid_pn532.c:107:5:PN532_SPI_ReadData	56	dynamic
+../Core/Src/rfid_pn532.c:118:5:PN532_SPI_WriteData	56	dynamic
+../Core/Src/rfid_pn532.c:128:6:PN532_SPI_WaitReady	24	static
+../Core/Src/rfid_pn532.c:143:5:PN532_SPI_Wakeup	16	static
+../Core/Src/rfid_pn532.c:154:6:PN532_SPI_Init	16	static
+../Core/Src/rfid_pn532.c:247:6:InitRfidWork	8	static
+../Core/Src/rfid_pn532.c:263:6:DoRfidWork	16	static

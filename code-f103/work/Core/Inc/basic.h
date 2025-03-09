@@ -1,0 +1,26 @@
+/*
+ * basic.h
+ *
+ *  Created on: Mar 4, 2025
+ *      Author: user
+ */
+
+#ifndef INC_BASIC_H_
+#define INC_BASIC_H_
+
+#include "stm32f1xx_hal.h"
+#include "stdio.h"
+#include "string.h"
+#include "memory.h"
+
+
+
+extern CAN_HandleTypeDef hcan;
+extern SPI_HandleTypeDef hspi1;
+extern UART_HandleTypeDef huart1;
+
+
+void InitBasic();
+uint32_t GetElapsedTick(uint32_t start);
+
+#endif /* INC_BASIC_H_ */

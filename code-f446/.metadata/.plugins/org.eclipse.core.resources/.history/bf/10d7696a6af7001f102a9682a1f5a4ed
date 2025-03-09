@@ -1,0 +1,167 @@
+/*
+ * rfid-pn532.c
+ *
+ *  Created on: Mar 2, 2025
+ *      Author: user
+ */
+
+#include "rfid-pn532.h"
+
+/* PN532 명령어 */
+uint8_t pn532_wakeup[] = {0x55, 0x55, 0x00, 0x00, 0x00}; // PN532 깨우기
+uint8_t pn532_get_firmware[] = {0x00, 0x00, 0xFF, 0x02, 0xFE, 0xD4, 0x02, 0x2A, 0x00}; // 펌웨어 정보 요청
+uint8_t pn532_read_passive_target[] = {0x00, 0x00, 0xFF, 0x04, 0xFC, 0xD4, 0x4A, 0x01, 0x00, 0xE1}; // NFC 태그 UID 읽기
+
+
+/* UART 전송 함수 */
+void PN532_SendCommand(uint8_t *cmd, uint8_t len) {
+    HAL_UART_Transmit(&huart5, cmd, len, 100);
+    HAL_Delay(100);
+}
+
+
+
+
+
+/* 데이터 버퍼 */
+uint8_t rx_buffer[64];
+
+/* UART 수신 함수 */
+void PN532_ReceiveResponse(uint8_t *buffer, uint8_t len) {
+    HAL_UART_Receive(&huart5, buffer, len, 200);
+}
+
+/* NFC 펌웨어 버전 확인 */
+void PN532_CheckFirmwareVersion() {
+    PN532_SendCommand(pn532_get_firmware, sizeof(pn532_get_firmware));
+    PN532_ReceiveResponse(rx_buffer, sizeof(rx_buffer));
+
+    printf("PN532 응답: ");
+    for (int i = 0; i < sizeof(rx_buffer); i++) {
+        printf("%02X ", rx_buffer[i]);
+    }
+    printf("\r\n");
+}
+
+/* NFC 태그 UID 읽기 */
+void PN532_ReadTagUID() {
+    PN532_SendCommand(pn532_read_passive_target, sizeof(pn532_read_passive_target));
+    PN532_ReceiveResponse(rx_buffer, sizeof(rx_buffer));
+
+    //if (rx_buffer[6] == 0xD5 && rx_buffer[7] == 0x4B)
+    //{  // 응답 확인
+        uint8_t uid_len = rx_buffer[12];  // UID 길이
+        printf("태그 UID: ");
+        //for (int i = 0; i < uid_len; i++) {
+        //    printf("%02X ", rx_buffer[13 + i]);
+        //}
+
+        for (int i = 0; i < 5; i++)
+        	printf("%02X ", rx_buffer[i]);
+
+        printf("\r\n");
+    //} else {
+    //    printf("태그를 감지하지 못했습니다.\r\n");
+    //}
+}
+
+/* NFC 태그 데이터 읽기 */
+void PN532_ReadTagData(uint8_t block) {
+    uint8_t read_block_command[] = {
+        0x00, 0x00, 0xFF, 0x05, 0xFB, 0xD4, 0x40, 0x01, block, 0x00, (0xD4 + 0x40 + 0x01 + block) & 0xFF
+    };
+
+    PN532_SendCommand(read_block_command, sizeof(read_block_command));
+    PN532_ReceiveResponse(rx_buffer, sizeof(rx_buffer));
+
+    printf("블록 %d 데이터: ", block);
+    for (int i = 0; i < 16; i++) {
+        printf("%02X ", rx_buffer[9 + i]);
+    }
+    printf("\r\n");
+}
+
+/* NFC 태그 데이터 쓰기 */
+void PN532_WriteTagData(uint8_t block, uint8_t *data) {
+    uint8_t write_block_command[] = {
+        0x00, 0x00, 0xFF, 0x15, 0xEB, 0xD4, 0x40, 0x01, block,
+        data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7],
+        data[8], data[9], data[10], data[11], data[12], data[13], data[14], data[15],
+        (0xD4 + 0x40 + 0x01 + block + data[0] + data[1] + data[2] + data[3] + data[4] +
+         data[5] + data[6] + data[7] + data[8] + data[9] + data[10] + data[11] +
+         data[12] + data[13] + data[14] + data[15]) & 0xFF
+    };
+
+    PN532_SendCommand(write_block_command, sizeof(write_block_command));
+    PN532_ReceiveResponse(rx_buffer, sizeof(rx_buffer));
+
+    if (rx_buffer[6] == 0xD5 && rx_buffer[7] == 0x41) {
+        printf("블록 %d 쓰기 성공!\r\n", block);
+    } else {
+        printf("블록 %d 쓰기 실패.\r\n", block);
+    }
+}
+
+
+
+
+void InitRfidWork()
+{
+    printf("PN532 NFC 테스트 시작...\r\n");
+
+    /* PN532 깨우기 */
+    PN532_SendCommand(pn532_wakeup, sizeof(pn532_wakeup));
+    HAL_Delay(500);
+
+    /* 펌웨어 버전 확인 */
+    PN532_CheckFirmwareVersion();
+}
+
+
+static uint8_t rfid_step = 0;
+static uint32_t tm_rfid_step = 0;
+
+void SetRfidStep(uint8_t step)
+{
+	rfid_step = step;
+	tm_rfid_step = GetTick();
+}
+
+void DoRfidWork()
+{
+	switch(rfid_step)
+	{
+	case 0:
+		if (GetElapsedTick(tm_rfid_step) >= 2000)
+		{
+			PN532_ReadTagUID();
+
+			//SetRfidStep(10);
+			SetRfidStep(0);
+		}
+		break;
+
+	case 10:
+		if (GetElapsedTick(tm_rfid_step) >= 2000)
+		{
+			// MIFARE 블록 4 읽기
+			PN532_ReadTagData(4);
+
+			//SetRfidStep(20);
+			SetRfidStep(0);
+		}
+		break;
+
+	case 20:
+		if (GetElapsedTick(tm_rfid_step) >= 2000)
+		{
+			// MIFARE 블록 4에 데이터 쓰기
+			uint8_t new_data[16] = { 'H', 'E', 'L', 'L', 'O', ' ', 'N', 'F', 'C', ' ', 'T', 'E', 'S', 'T', '!', ' ' };
+			PN532_WriteTagData(4, new_data);
+
+			SetRfidStep(0);
+		}
+		break;
+	}
+
+}

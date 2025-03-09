@@ -1,0 +1,23 @@
+23:31:10 **** Incremental Build of configuration Debug for project sd_spi ****
+make -j6 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../FATFS/Target -I../FATFS/App -I../Middlewares/Third_Party/FatFs/src -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "sd_spi.elf" @"objects.list"   -mcpu=cortex-m3 -T"D:\code\stm32\code-f103\sd_spi\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="sd_spi.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: sd_spi.elf
+ 
+arm-none-eabi-size  sd_spi.elf 
+arm-none-eabi-objdump -h -S sd_spi.elf  > "sd_spi.list"
+   text	   data	    bss	    dec	    hex	filename
+  34900	    128	  11040	  46068	   b3f4	sd_spi.elf
+arm-none-eabi-objcopy  -O ihex sd_spi.elf  "sd_spi.hex"
+Finished building: default.size.stdout
+arm-none-eabi-objcopy  -O binary sd_spi.elf  "sd_spi.bin"
+ 
+Finished building: sd_spi.hex
+Finished building: sd_spi.list
+ 
+Finished building: sd_spi.bin
+ 
+ 
+
+23:31:13 Build Finished. 0 errors, 0 warnings. (took 2s.768ms)
+

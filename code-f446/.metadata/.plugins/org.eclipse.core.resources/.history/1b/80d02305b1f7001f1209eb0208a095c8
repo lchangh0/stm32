@@ -1,0 +1,23 @@
+/*
+ * rfid-pn532-spi.c
+ *
+ *  Created on: Mar 3, 2025
+ *      Author: user
+ */
+
+#include "rfid-pn532-spi.h"
+
+
+
+
+
+void InitRfidWorkSpi()
+{
+
+}
+
+
+void DoRfidWorkSpi()
+{
+
+}

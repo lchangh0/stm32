@@ -1,0 +1,30 @@
+/*
+ * lcd_keypad.h
+ *
+ *  Created on: Feb 27, 2025
+ *      Author: user
+ */
+
+#ifndef INC_LCD_KEYPAD_H_
+#define INC_LCD_KEYPAD_H_
+
+#include "basic.h"
+
+#define BTN_SEL 1
+#define BTN_LEFT 2
+#define BTN_RIGHT 3
+#define BTN_UP 4
+#define BTN_DOWN 5
+
+
+//void LCD_Init();
+//void LCD_SetCursor(uint8_t row, uint8_t col);
+//void LCD_Print(char* str);
+
+void PrintLcdLine1(char *str);
+void PrintLcdLine2(char *str);
+
+void InitLcdKeypadWork();
+void DoLcdKeypadWork();
+
+#endif /* INC_LCD_KEYPAD_H_ */

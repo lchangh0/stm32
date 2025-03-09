@@ -1,0 +1,17 @@
+/*
+ * lcd_keypad.h
+ *
+ *  Created on: Feb 27, 2025
+ *      Author: user
+ */
+
+#ifndef INC_LCD_KEYPAD_H_
+#define INC_LCD_KEYPAD_H_
+
+#include "basic.h"
+
+void LCD_Init();
+void LCD_SetCursor(uint8_t row, uint8_t col);
+void LCD_Print(char* str);
+
+#endif /* INC_LCD_KEYPAD_H_ */

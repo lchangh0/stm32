@@ -1,0 +1,49 @@
+/*
+ * basic.h
+ *
+ *  Created on: Feb 22, 2025
+ *      Author: user
+ */
+
+#ifndef INC_BASIC_H_
+#define INC_BASIC_H_
+
+#include "stm32f4xx_hal.h"
+#include <stdio.h>
+#include <string.h>
+
+typedef uint8_t bool;
+typedef uint8_t byte;
+
+#define TRUE 1
+#define FALSE 0
+
+
+extern ADC_HandleTypeDef hadc1;
+
+extern CAN_HandleTypeDef hcan1;
+
+extern TIM_HandleTypeDef htim1;
+extern TIM_HandleTypeDef htim2;
+extern TIM_HandleTypeDef htim3;
+extern TIM_HandleTypeDef htim4;
+
+extern UART_HandleTypeDef huart2;
+
+extern SPI_HandleTypeDef hspi1;
+
+uint32_t GetTick();
+uint32_t GetElapsedTick(uint32_t start);
+
+void InitDWT(void);
+void DelayUS(uint32_t us);
+void DelayMS(uint32_t ms);
+
+uint32_t GetCycCnt();
+uint32_t GetElapsedCycUS(uint32_t start);
+
+
+void Error_Handler(void);
+
+
+#endif /* INC_BASIC_H_ */

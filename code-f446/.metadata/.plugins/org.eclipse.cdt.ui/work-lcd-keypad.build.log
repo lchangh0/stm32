@@ -1,0 +1,10 @@
+21:24:16 **** Incremental Build of configuration Debug for project work-lcd-keypad ****
+make -j6 all 
+arm-none-eabi-size  work-lcd-keypad.elf 
+   text	   data	    bss	    dec	    hex	filename
+  14320	     92	   2060	  16472	   4058	work-lcd-keypad.elf
+Finished building: default.size.stdout
+ 
+
+21:24:17 Build Finished. 0 errors, 0 warnings. (took 1s.60ms)
+

@@ -1,0 +1,20 @@
+/*
+ * fnd4_tm1637.c
+ *
+ *  Created on: Feb 28, 2025
+ *      Author: user
+ */
+
+#include "fnd4_tm1637.h"
+
+
+void InitFndWork()
+{
+
+}
+
+
+void DoFndWork()
+{
+
+}

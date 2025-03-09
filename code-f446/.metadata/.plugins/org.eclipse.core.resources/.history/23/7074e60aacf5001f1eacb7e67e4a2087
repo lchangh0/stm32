@@ -1,0 +1,154 @@
+/*
+ * fnd4_tm1637.c
+ *
+ *  Created on: Feb 28, 2025
+ *      Author: user
+ */
+
+#include "fnd4_tm1637.h"
+
+// 세그먼트 데이터 (0~9)
+static const uint8_t segment_data[] = {
+    0x3F, // 0
+    0x06, // 1
+    0x5B, // 2
+    0x4F, // 3
+    0x66, // 4
+    0x6D, // 5
+    0x7D, // 6
+    0x07, // 7
+    0x7F, // 8
+    0x6F  // 9
+};
+
+// 기본 GPIO 제어 함수
+static void set_pin_high(GPIO_TypeDef* port, uint16_t pin) {
+    HAL_GPIO_WritePin(port, pin, GPIO_PIN_SET);
+}
+
+static void set_pin_low(GPIO_TypeDef* port, uint16_t pin) {
+    HAL_GPIO_WritePin(port, pin, GPIO_PIN_RESET);
+}
+
+static void delay_us(uint32_t us) {
+    //for (uint32_t i = 0; i < us * (SystemCoreClock / 1000000) / 8; i++) {
+    //    __NOP();
+    //}
+	DelayUS(us);
+}
+
+// TM1637 시작 신호
+static void TM1637_Start(TM1637_t* display) {
+    set_pin_high(display->clk_port, display->clk_pin);
+    set_pin_high(display->dio_port, display->dio_pin);
+    delay_us(TM1637_DELAY_US);
+    set_pin_low(display->dio_port, display->dio_pin);
+}
+
+// TM1637 정지 신호
+static void TM1637_Stop(TM1637_t* display) {
+    set_pin_low(display->clk_port, display->clk_pin);
+    set_pin_low(display->dio_port, display->dio_pin);
+    delay_us(TM1637_DELAY_US);
+    set_pin_high(display->clk_port, display->clk_pin);
+    set_pin_high(display->dio_port, display->dio_pin);
+}
+
+// 바이트 전송
+static void TM1637_WriteByte(TM1637_t* display, uint8_t byte) {
+    for (uint8_t i = 0; i < 8; i++) {
+        set_pin_low(display->clk_port, display->clk_pin);
+        delay_us(TM1637_DELAY_US);
+        if (byte & 0x01) {
+            set_pin_high(display->dio_port, display->dio_pin);
+        } else {
+            set_pin_low(display->dio_port, display->dio_pin);
+        }
+        delay_us(TM1637_DELAY_US);
+        set_pin_high(display->clk_port, display->clk_pin);
+        delay_us(TM1637_DELAY_US);
+        byte >>= 1;
+    }
+    // ACK
+    set_pin_low(display->clk_port, display->clk_pin);
+    delay_us(TM1637_DELAY_US);
+    set_pin_high(display->clk_port, display->clk_pin);
+    delay_us(TM1637_DELAY_US);
+}
+
+// 초기화
+void TM1637_Init(TM1637_t* display, GPIO_TypeDef* clk_port, uint16_t clk_pin, GPIO_TypeDef* dio_port, uint16_t dio_pin) {
+    display->clk_port = clk_port;
+    display->clk_pin = clk_pin;
+    display->dio_port = dio_port;
+    display->dio_pin = dio_pin;
+
+    GPIO_InitTypeDef GPIO_InitStruct = {0};
+    GPIO_InitStruct.Pin = clk_pin | dio_pin;
+    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    HAL_GPIO_Init(clk_port, &GPIO_InitStruct);
+}
+
+// 밝기 설정
+void TM1637_SetBrightness(TM1637_t* display, TM1637_Brightness_t brightness) {
+    TM1637_Start(display);
+    TM1637_WriteByte(display, brightness);
+    TM1637_Stop(display);
+}
+
+// 숫자 표시
+void TM1637_DisplayNumber(TM1637_t* display, int num) {
+    uint8_t digits[4];
+    digits[0] = segment_data[num / 1000 % 10];
+    digits[1] = segment_data[num / 100 % 10];
+    digits[2] = segment_data[num / 10 % 10];
+    digits[3] = segment_data[num % 10];
+
+    TM1637_Start(display);
+    TM1637_WriteByte(display, 0x40); // 데이터 쓰기 모드
+    TM1637_Stop(display);
+
+    TM1637_Start(display);
+    TM1637_WriteByte(display, 0xC0); // 첫 번째 주소
+    for (uint8_t i = 0; i < 4; i++) {
+        TM1637_WriteByte(display, digits[i]);
+    }
+    TM1637_Stop(display);
+}
+
+// 원시 데이터 표시
+void TM1637_DisplayRaw(TM1637_t* display, uint8_t* data, uint8_t length, uint8_t pos) {
+    TM1637_Start(display);
+    TM1637_WriteByte(display, 0x40); // 데이터 쓰기 모드
+    TM1637_Stop(display);
+
+    TM1637_Start(display);
+    TM1637_WriteByte(display, 0xC0 + pos); // 시작 주소
+    for (uint8_t i = 0; i < length; i++) {
+        TM1637_WriteByte(display, data[i]);
+    }
+    TM1637_Stop(display);
+}
+
+
+TM1637_t display;
+
+void InitFndWork()
+{
+	TM1637_Init(&display, GPIOC, GPIO_PIN_10, GPIOC, GPIO_PIN_12);
+}
+
+static int cnt;
+static uint32_t tm_fnd;
+
+void DoFndWork()
+{
+	if (GetElapsedTick(tm_fnd) > 500)
+	{
+		tm_fnd = GetTick();
+		cnt ++;
+		TM1637_DisplayNumber(&display, cnt);
+	}
+}

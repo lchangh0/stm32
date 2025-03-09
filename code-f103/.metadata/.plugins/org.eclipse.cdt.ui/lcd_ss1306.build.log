@@ -1,0 +1,27 @@
+11:13:02 **** Incremental Build of configuration Debug for project lcd_ss1306 ****
+make -j6 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+In file included from ../Core/Src/main.c:24:
+../Core/Inc/ssd1306.h:73:13: warning: 'ssd1306_WriteCommand' declared 'static' but never defined [-Wunused-function]
+   73 | static void ssd1306_WriteCommand(uint8_t command);
+      |             ^~~~~~~~~~~~~~~~~~~~
+arm-none-eabi-gcc -o "lcd_ss1306.elf" @"objects.list"   -mcpu=cortex-m3 -T"D:\can\stm32_code\code-f103\lcd_ss1306\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="lcd_ss1306.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: lcd_ss1306.elf
+ 
+arm-none-eabi-size  lcd_ss1306.elf 
+arm-none-eabi-objdump -h -S lcd_ss1306.elf  > "lcd_ss1306.list"
+   text	   data	    bss	    dec	    hex	filename
+  12420	     20	   2756	  15196	   3b5c	lcd_ss1306.elf
+arm-none-eabi-objcopy  -O ihex lcd_ss1306.elf  "lcd_ss1306.hex"
+Finished building: default.size.stdout
+arm-none-eabi-objcopy  -O binary lcd_ss1306.elf  "lcd_ss1306.bin"
+ 
+Finished building: lcd_ss1306.list
+Finished building: lcd_ss1306.hex
+ 
+ 
+Finished building: lcd_ss1306.bin
+ 
+
+11:13:05 Build Finished. 0 errors, 1 warnings. (took 2s.329ms)
+

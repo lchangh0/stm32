@@ -1,0 +1,10 @@
+14:00:57 **** Incremental Build of configuration Debug for project lcd_st7735s ****
+make -j6 all 
+arm-none-eabi-size  lcd_st7735s.elf 
+   text	   data	    bss	    dec	    hex	filename
+  11368	     20	   1668	  13056	   3300	lcd_st7735s.elf
+Finished building: default.size.stdout
+ 
+
+14:00:59 Build Finished. 0 errors, 0 warnings. (took 1s.69ms)
+

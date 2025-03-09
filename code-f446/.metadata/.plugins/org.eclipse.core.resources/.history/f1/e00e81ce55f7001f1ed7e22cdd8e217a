@@ -1,0 +1,13 @@
+/*
+ * rfid-pn532.h
+ *
+ *  Created on: Mar 2, 2025
+ *      Author: user
+ */
+
+#ifndef INC_RFID_PN532_H_
+#define INC_RFID_PN532_H_
+
+
+
+#endif /* INC_RFID_PN532_H_ */

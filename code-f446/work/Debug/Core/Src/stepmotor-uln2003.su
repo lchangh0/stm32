@@ -1,0 +1,4 @@
+../Core/Src/stepmotor-uln2003.c:25:6:Stepper_Step	16	static
+../Core/Src/stepmotor-uln2003.c:49:6:HAL_TIM_PeriodElapsedCallback	24	static
+../Core/Src/stepmotor-uln2003.c:62:6:Stepper_Rotate	16	static
+../Core/Src/stepmotor-uln2003.c:72:6:DoStepMotorWork	8	static

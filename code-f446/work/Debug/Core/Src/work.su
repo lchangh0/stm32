@@ -1,0 +1,5 @@
+../Core/Src/work.c:22:6:InitWork	8	static
+../Core/Src/work.c:51:6:DoWork	8	static
+../Core/Src/work.c:74:6:CheckUart2Rx	16	static
+../Core/Src/work.c:99:6:ReadButton	16	static
+../Core/Src/work.c:128:6:CheckButtonPressed	16	static

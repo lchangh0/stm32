@@ -1,0 +1,27 @@
+/*
+ * basic.c
+ *
+ *  Created on: Mar 4, 2025
+ *      Author: user
+ */
+
+#include "basic.h"
+
+uint32_t GetElapsedTick(uint32_t start)
+{
+	uint32_t now = HAL_GetTick();
+
+	if (now >= start)
+		return now - start;
+	else
+		return (0xffff - start) + now;
+}
+
+
+int __io_putchar(int ch)
+{
+	// printf()함수를 실행했을 때 UART로 출력
+	HAL_UART_Transmit(&huart1, (uint8_t*)&ch, 1, 0xffff);
+	return ch;
+}
+

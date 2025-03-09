@@ -1,0 +1,44 @@
+/*
+ * fnd4_tm1637.h
+ *
+ *  Created on: Feb 28, 2025
+ *      Author: user
+ */
+
+#ifndef INC_FND4_TM1637_H_
+#define INC_FND4_TM1637_H_
+
+#include "basic.h"
+
+#define TM1637_DELAY_US 5
+
+// 밝기 설정 (0~7)
+typedef enum {
+    Brightness0 = 0x88,
+    Brightness1 = 0x89,
+    Brightness2 = 0x8A,
+    Brightness3 = 0x8B,
+    Brightness4 = 0x8C,
+    Brightness5 = 0x8D,
+    Brightness6 = 0x8E,
+    Brightness7 = 0x8F
+} TM1637_Brightness_t;
+
+// TM1637 구조체
+typedef struct {
+    GPIO_TypeDef* clk_port;
+    uint16_t clk_pin;
+    GPIO_TypeDef* dio_port;
+    uint16_t dio_pin;
+} TM1637_t;
+
+void TM1637_Init(TM1637_t* display, GPIO_TypeDef* clk_port, uint16_t clk_pin, GPIO_TypeDef* dio_port, uint16_t dio_pin);
+void TM1637_SetBrightness(TM1637_t* display, TM1637_Brightness_t brightness);
+void TM1637_DisplayNumber(TM1637_t* display, int num);
+void TM1637_DisplayRaw(TM1637_t* display, uint8_t* data, uint8_t length, uint8_t pos);
+void DisplayFnd4(int num);
+
+void InitFndWork();
+void DoFndWork();
+
+#endif /* INC_FND4_TM1637_H_ */

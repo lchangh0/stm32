@@ -1,0 +1,6 @@
+../Core/Src/work.c:13:6:InitWork	8	static
+../Core/Src/work.c:23:6:ReadButton	8	static
+../Core/Src/work.c:48:6:ToggleRunLed	8	static
+../Core/Src/work.c:61:5:SendCanFrame	64	static
+../Core/Src/work.c:85:5:SendCanMessagePoll	16	static
+../Core/Src/work.c:102:5:SendCanMessageButton	24	static

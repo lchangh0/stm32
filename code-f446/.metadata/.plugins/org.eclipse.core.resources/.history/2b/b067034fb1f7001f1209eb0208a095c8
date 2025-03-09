@@ -1,0 +1,93 @@
+/*
+ * rfid-pn532-spi.c
+ *
+ *  Created on: Mar 3, 2025
+ *      Author: user
+ */
+
+#include "rfid-pn532-spi.h"
+
+#define NSS_GPIO_Port PORTB
+#define NSS_Pin GPIO_PIN_8
+#define PN532_SPI NSS_GPIO_Port, NSS_Pin
+
+#define PN532_COMMAND_GETFIRMWAREVERSION  0x02
+#define PN532_COMMAND_SAMCONFIGURATION   0x14
+
+
+uint8_t pn532_buffer[32]; // 송수신 버퍼
+
+
+// PN532에 SPI 패킷 전송
+void PN532_WriteCommand(uint8_t *cmd, uint8_t cmd_len) {
+    uint8_t packet[cmd_len + 2];
+    packet[0] = 0x01;  // SPI 프레임 시작 바이트
+    memcpy(&packet[1], cmd, cmd_len);
+
+    HAL_GPIO_WritePin(PN532_SPI, GPIO_PIN_RESET); // NSS 활성화
+    HAL_SPI_Transmit(&hspi1, packet, cmd_len + 1, HAL_MAX_DELAY);
+    HAL_GPIO_WritePin(PN532_SPI, GPIO_PIN_SET);   // NSS 비활성화
+}
+
+
+// PN532에서 응답을 읽음
+uint8_t PN532_ReadResponse(uint8_t *response, uint8_t length) {
+    uint8_t status = 0;
+    uint8_t dummy = 0x00;
+    uint8_t buffer[length + 1];
+
+    HAL_GPIO_WritePin(PN532_SPI, GPIO_PIN_RESET); // NSS 활성화
+    HAL_SPI_Transmit(&hspi1, &dummy, 1, HAL_MAX_DELAY); // 더미 바이트 전송
+    HAL_SPI_Receive(&hspi1, buffer, length + 1, HAL_MAX_DELAY);
+    HAL_GPIO_WritePin(PN532_SPI, GPIO_PIN_SET);   // NSS 비활성화
+
+    memcpy(response, &buffer[1], length);
+    return status;
+}
+
+
+// PN532 펌웨어 버전 확인
+uint8_t PN532_GetFirmwareVersion() {
+    uint8_t cmd[] = {0xD4, PN532_COMMAND_GETFIRMWAREVERSION};  // PN532 명령
+    uint8_t response[6];
+
+    PN532_WriteCommand(cmd, sizeof(cmd));
+    HAL_Delay(100);  // 응답 대기
+
+    if (PN532_ReadResponse(response, sizeof(response)) == 0) {
+        return response[2];  // 버전 정보 반환
+    }
+    return 0;
+}
+
+
+// PN532 SAM 설정 (ISO14443A 모드 활성화)
+void PN532_SAMConfiguration() {
+    uint8_t cmd[] = {0xD4, PN532_COMMAND_SAMCONFIGURATION, 0x01, 0x14, 0x01}; // SAM 설정
+    PN532_WriteCommand(cmd, sizeof(cmd));
+    HAL_Delay(100);
+}
+
+
+// 초기화 코드
+void PN532_Init() {
+    PN532_SAMConfiguration();
+    uint8_t version = PN532_GetFirmwareVersion();
+    if (version != 0) {
+        printf("PN532 Firmware Version: 0x%X\n", version);
+    } else {
+        printf("PN532 응답 없음\n");
+    }
+}
+
+
+void InitRfidWorkSpi()
+{
+	PN532_Init();
+}
+
+
+void DoRfidWorkSpi()
+{
+
+}

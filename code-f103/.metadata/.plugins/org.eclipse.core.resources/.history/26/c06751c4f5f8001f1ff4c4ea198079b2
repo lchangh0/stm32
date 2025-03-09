@@ -1,0 +1,35 @@
+/*
+ * work.c
+ *
+ *  Created on: Feb 15, 2025
+ *      Author: user
+ */
+
+#include <stdio.h>
+#include "work.h"
+#include "led.h"
+#include "button.h"
+#include "can.h"
+
+
+void InitWork()
+{
+	InitBasic();
+
+	InitCanWork();
+}
+
+
+
+void DoWork()
+{
+	DoLedWork();
+	DoButtonWork();
+
+	DoCanWork();
+}
+
+
+
+
+

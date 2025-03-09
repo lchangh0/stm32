@@ -1,0 +1,8 @@
+.metadata/
+.settings/
+Debug/
+Release/
+**/.vscode/settings.json
+Reference/
+**/*.launch
+**/.DS_Store

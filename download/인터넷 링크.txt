@@ -1,0 +1,4 @@
+
+[STM32] SPI + FatFS를 이용한 SD카드 읽기/쓰기
+https://blog.naver.com/eziya76/221188701172
+

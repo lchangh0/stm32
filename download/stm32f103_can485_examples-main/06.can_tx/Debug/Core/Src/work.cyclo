@@ -1,0 +1,6 @@
+../Core/Src/work.c:13:6:InitWork	1
+../Core/Src/work.c:23:6:ReadButton	5
+../Core/Src/work.c:48:6:ToggleRunLed	2
+../Core/Src/work.c:61:5:SendCanFrame	3
+../Core/Src/work.c:85:5:SendCanMessagePoll	1
+../Core/Src/work.c:102:5:SendCanMessageButton	1

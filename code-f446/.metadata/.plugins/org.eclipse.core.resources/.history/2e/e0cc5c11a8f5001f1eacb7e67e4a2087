@@ -1,0 +1,127 @@
+/*
+ * fnd4_tm1637.c
+ *
+ *  Created on: Feb 28, 2025
+ *      Author: user
+ */
+
+#include "fnd4_tm1637.h"
+
+// TM1637 핀 정의
+#define TM1637_CLK_Pin GPIO_PIN_10
+#define TM1637_CLK_GPIO_Port GPIOC
+#define TM1637_DIO_Pin GPIO_PIN_12
+#define TM1637_DIO_GPIO_Port GPIOC
+
+// 디지털 출력 함수
+void TM1637_DIO_HIGH() { HAL_GPIO_WritePin(TM1637_DIO_GPIO_Port, TM1637_DIO_Pin, GPIO_PIN_SET); }
+void TM1637_DIO_LOW() { HAL_GPIO_WritePin(TM1637_DIO_GPIO_Port, TM1637_DIO_Pin, GPIO_PIN_RESET); }
+void TM1637_CLK_HIGH() { HAL_GPIO_WritePin(TM1637_CLK_GPIO_Port, TM1637_CLK_Pin, GPIO_PIN_SET); }
+void TM1637_CLK_LOW() { HAL_GPIO_WritePin(TM1637_CLK_GPIO_Port, TM1637_CLK_Pin, GPIO_PIN_RESET); }
+
+
+// 짧은 딜레이 함수 (타이밍 조절)
+void TM1637_Delay() {
+    for (volatile int i = 0; i < 100; i++);
+}
+
+// 시작 신호
+void TM1637_Start() {
+    TM1637_DIO_HIGH();
+    TM1637_CLK_HIGH();
+    TM1637_Delay();
+    TM1637_DIO_LOW();
+    TM1637_Delay();
+    TM1637_CLK_LOW();
+}
+
+// 종료 신호
+void TM1637_Stop() {
+    TM1637_CLK_LOW();
+    TM1637_Delay();
+    TM1637_DIO_LOW();
+    TM1637_Delay();
+    TM1637_CLK_HIGH();
+    TM1637_Delay();
+    TM1637_DIO_HIGH();
+}
+
+// 바이트 전송
+void TM1637_WriteByte(uint8_t data) {
+    for (int i = 0; i < 8; i++) {
+        TM1637_CLK_LOW();
+        if (data & 0x01) {
+            TM1637_DIO_HIGH();
+        } else {
+            TM1637_DIO_LOW();
+        }
+        TM1637_Delay();
+        TM1637_CLK_HIGH();
+        TM1637_Delay();
+        data >>= 1;
+    }
+
+    // ACK 신호 수신
+    TM1637_CLK_LOW();
+    TM1637_DIO_HIGH();  // 입력 모드
+    TM1637_Delay();
+    TM1637_CLK_HIGH();
+    TM1637_Delay();
+    TM1637_CLK_LOW();
+}
+
+// 디스플레이 초기화
+void TM1637_Init() {
+    GPIO_InitTypeDef GPIO_InitStruct = {0};
+
+    __HAL_RCC_GPIOB_CLK_ENABLE();
+
+    GPIO_InitStruct.Pin = TM1637_CLK_Pin | TM1637_DIO_Pin;
+    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+}
+
+// TM1637에 숫자 표시 (4자리)
+void TM1637_Display(int num) {
+    uint8_t digits[4];
+    digits[0] = num / 1000;
+    digits[1] = (num / 100) % 10;
+    digits[2] = (num / 10) % 10;
+    digits[3] = num % 10;
+
+    TM1637_Start();
+    TM1637_WriteByte(0x40);  // 자동 주소 증가 모드
+    TM1637_Stop();
+
+    TM1637_Start();
+    TM1637_WriteByte(0xC0);  // 첫 번째 자리 주소
+    for (int i = 0; i < 4; i++) {
+        TM1637_WriteByte(digits[i]);
+    }
+    TM1637_Stop();
+
+    TM1637_Start();
+    TM1637_WriteByte(0x88);  // 디스플레이 ON, 밝기 설정
+    TM1637_Stop();
+}
+
+
+void InitFndWork()
+{
+	TM1637_Init();
+}
+
+static int cnt;
+static uint32_t tm_fnd;
+
+void DoFndWork()
+{
+	if (GetElapsedTick(tm_fnd) > 500)
+	{
+		tm_fnd = GetTick();
+		cnt ++;
+		TM1637_Display(cnt);
+	}
+}

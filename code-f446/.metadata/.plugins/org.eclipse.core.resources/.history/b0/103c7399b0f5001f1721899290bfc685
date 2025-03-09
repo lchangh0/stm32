@@ -1,0 +1,13 @@
+/*
+ * thermo_dht11.h
+ *
+ *  Created on: Feb 28, 2025
+ *      Author: user
+ */
+
+#ifndef INC_THERMO_DHT11_H_
+#define INC_THERMO_DHT11_H_
+
+
+
+#endif /* INC_THERMO_DHT11_H_ */
