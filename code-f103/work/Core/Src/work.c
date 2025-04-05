@@ -6,20 +6,24 @@
  */
 
 #include <stdio.h>
+#include <work_rfid_pn532.h>
 #include "work.h"
 #include "led.h"
 #include "button.h"
 #include "can.h"
-#include "spi1.h"
 #include "pn532.h"
 #include "pn532_stm32f1.h"
+#include "work_buzzer.h"
+#include "work_test.h"
 
 void InitWork()
 {
 	InitBasic();
 
 	//InitCanWork();
-	InitSpi1Work();
+	//InitRfidPn532Work();
+	InitWorkBuzzer();
+	//InitWorkTest();
 
 	printf("Start\n");
 }
@@ -29,10 +33,11 @@ void InitWork()
 void DoWork()
 {
 	DoLedWork();
-	DoButtonWork();
-
+	//DoButtonWork();
 	//DoCanWork();
-	DoSpi1Work();
+	//DoRfidPn532Work();
+	DoWorkBuzzer();
+	//DoWorkTest();
 }
 
 

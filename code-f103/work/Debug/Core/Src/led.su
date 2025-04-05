@@ -1,0 +1,6 @@
+../Core/Src/led.c:13:6:SetLedD1	16	static
+../Core/Src/led.c:21:6:ToggleLedD1	8	static
+../Core/Src/led.c:26:6:SetLedD2	16	static
+../Core/Src/led.c:34:6:ToggleLedD2	8	static
+../Core/Src/led.c:42:6:ToggleRunLed	8	static
+../Core/Src/led.c:54:6:DoLedWork	8	static

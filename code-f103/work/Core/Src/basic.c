@@ -20,6 +20,11 @@ void InitBasic()
 }
 
 
+uint32_t GetTick()
+{
+	return HAL_GetTick();
+}
+
 uint32_t GetElapsedTick(uint32_t start)
 {
 	uint32_t now = HAL_GetTick();

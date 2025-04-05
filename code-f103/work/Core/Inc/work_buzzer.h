@@ -1,0 +1,16 @@
+/*
+ * work_buzzer.h
+ *
+ *  Created on: Mar 16, 2025
+ *      Author: user
+ */
+
+#ifndef INC_WORK_BUZZER_H_
+#define INC_WORK_BUZZER_H_
+
+#include "basic.h"
+
+void InitWorkBuzzer();
+void DoWorkBuzzer();
+
+#endif /* INC_WORK_BUZZER_H_ */

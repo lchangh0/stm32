@@ -1,0 +1,18 @@
+/*
+ * work_test.c
+ *
+ *  Created on: Mar 18, 2025
+ *      Author: user
+ */
+
+#include "work_test.h"
+
+
+void InitWorkTest()
+{
+}
+
+
+void DoWorkTest()
+{
+}

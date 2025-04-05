@@ -1,0 +1,26 @@
+/*
+ * work_buzzer.c
+ *
+ *  Created on: Mar 16, 2025
+ *      Author: user
+ */
+
+
+#include "work_buzzer.h"
+
+void InitWorkBuzzer()
+{}
+
+
+static uint32_t tm_buzzer;
+
+void DoWorkBuzzer()
+{
+	if (GetElapsedTick(tm_buzzer) >= 500)
+	{
+		tm_buzzer = GetTick();
+
+		uint32_t adc = HAL_ADC_GetValue(&hadc1);
+		printf("ADC:%ld\n", adc);
+	}
+}

@@ -1,0 +1,8 @@
+../Core/Src/basic.c:16:6:InitBasic	1
+../Core/Src/basic.c:23:10:GetTick	1
+../Core/Src/basic.c:28:10:GetElapsedTick	2
+../Core/Src/basic.c:39:5:__io_putchar	1
+../Core/Src/basic.c:49:6:HAL_UART_RxCpltCallback	2
+../Core/Src/basic.c:62:10:GetUart1RxCount	2
+../Core/Src/basic.c:74:9:ReadUart1Byte	1
+../Core/Src/basic.c:81:6:WriteUart1Bytes	1

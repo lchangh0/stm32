@@ -1,22 +1,10 @@
-20:24:49 **** Incremental Build of configuration Debug for project led8x8_max7219 ****
+21:30:19 **** Build of configuration Debug for project led8x8_max7219 ****
 make -j6 all 
-arm-none-eabi-gcc -o "led8x8_max7219.elf" @"objects.list"   -mcpu=cortex-m3 -T"D:\code\stm32\code-f103\led8x8_max7219\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="led8x8_max7219.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
-Finished building target: led8x8_max7219.elf
- 
 arm-none-eabi-size  led8x8_max7219.elf 
-arm-none-eabi-objdump -h -S led8x8_max7219.elf  > "led8x8_max7219.list"
    text	   data	    bss	    dec	    hex	filename
   10020	     12	   1772	  11804	   2e1c	led8x8_max7219.elf
-arm-none-eabi-objcopy  -O ihex led8x8_max7219.elf  "led8x8_max7219.hex"
 Finished building: default.size.stdout
-arm-none-eabi-objcopy  -O binary led8x8_max7219.elf  "led8x8_max7219.bin"
- 
-Finished building: led8x8_max7219.list
-Finished building: led8x8_max7219.hex
- 
-Finished building: led8x8_max7219.bin
- 
  
 
-20:24:51 Build Finished. 0 errors, 0 warnings. (took 2s.389ms)
+21:30:20 Build Finished. 0 errors, 0 warnings. (took 1s.12ms)
 

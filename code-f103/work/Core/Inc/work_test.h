@@ -1,0 +1,16 @@
+/*
+ * work_test.h
+ *
+ *  Created on: Mar 18, 2025
+ *      Author: user
+ */
+
+#ifndef INC_WORK_TEST_H_
+#define INC_WORK_TEST_H_
+
+#include "basic.h"
+
+void InitWorkTest();
+void DoWorkTest();
+
+#endif /* INC_WORK_TEST_H_ */

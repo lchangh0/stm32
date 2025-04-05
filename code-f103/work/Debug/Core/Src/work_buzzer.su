@@ -1,0 +1,2 @@
+../Core/Src/work_buzzer.c:11:6:InitWorkBuzzer	8	static
+../Core/Src/work_buzzer.c:20:6:DoWorkBuzzer	16	static

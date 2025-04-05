@@ -1,0 +1,2 @@
+../Core/Src/work_rfid_pn532.c:20:6:InitRfidPn532Work	8	static
+../Core/Src/work_rfid_pn532.c:69:6:DoRfidPn532Work	16	static

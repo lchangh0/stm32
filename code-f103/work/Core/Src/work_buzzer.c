@@ -1,0 +1,35 @@
+/*
+ * work_buzzer.c
+ *
+ *  Created on: Mar 16, 2025
+ *      Author: user
+ */
+
+
+#include "work_buzzer.h"
+
+void InitWorkBuzzer()
+{
+	HAL_ADC_Start(&hadc1);
+	HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
+}
+
+
+static uint32_t tm_buzzer;
+
+void DoWorkBuzzer()
+{
+	if (GetElapsedTick(tm_buzzer) >= 500)
+	{
+		tm_buzzer = GetTick();
+
+		uint32_t adc = HAL_ADC_GetValue(&hadc1);
+		printf("ADC:%ld\n", adc);
+
+		// Duty Cycle 설정
+		__HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, 10);
+
+		// 주기 변경
+		__HAL_TIM_SET_AUTORELOAD(&htim2, adc);
+	}
+}

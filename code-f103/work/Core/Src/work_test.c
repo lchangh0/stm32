@@ -1,0 +1,28 @@
+/*
+ * work_test.c
+ *
+ *  Created on: Mar 18, 2025
+ *      Author: user
+ */
+
+#include "work_test.h"
+
+
+void InitWorkTest()
+{
+}
+
+
+static uint32_t tm_test;
+
+void DoWorkTest()
+{
+	if (GetElapsedTick(tm_test) >= 500)
+	{
+		tm_test = GetTick();
+
+		uint8_t val = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_7);
+		printf("%d\n", val);
+
+	}
+}

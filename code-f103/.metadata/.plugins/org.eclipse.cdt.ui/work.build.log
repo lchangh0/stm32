@@ -1,24 +1,24 @@
-20:54:44 **** Incremental Build of configuration Debug for project work ****
+20:17:04 **** Incremental Build of configuration Debug for project work ****
 make -j6 all 
-arm-none-eabi-gcc "../Core/Src/spi1.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/spi1.d" -MT"Core/Src/spi1.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/spi1.o"
-arm-none-eabi-gcc -o "work.elf" @"objects.list"   -mcpu=cortex-m3 -T"D:\can\stm32_code\code-f103\work\STM32F103CBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="work.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+arm-none-eabi-gcc "../Core/Src/work.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/work.d" -MT"Core/Src/work.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/work.o"
+arm-none-eabi-gcc -o "work.elf" @"objects.list"   -mcpu=cortex-m3 -T"D:\code\stm32\code-f103\work\STM32F103CBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="work.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 C:/ST/STM32CubeIDE_1.17.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld.exe: warning: work.elf has a LOAD segment with RWX permissions
 Finished building target: work.elf
  
 arm-none-eabi-size  work.elf 
 arm-none-eabi-objdump -h -S work.elf  > "work.list"
    text	   data	    bss	    dec	    hex	filename
-  22128	    112	   4488	  26728	   6868	work.elf
+  21864	    112	   4304	  26280	   66a8	work.elf
 arm-none-eabi-objcopy  -O ihex work.elf  "work.hex"
 Finished building: default.size.stdout
 arm-none-eabi-objcopy  -O binary work.elf  "work.bin"
  
-Finished building: work.list
+Finished building: work.bin
 Finished building: work.hex
  
+Finished building: work.list
  
-Finished building: work.bin
  
 
-20:54:46 Build Finished. 0 errors, 1 warnings. (took 2s.695ms)
+20:17:09 Build Finished. 0 errors, 1 warnings. (took 5s.702ms)
 

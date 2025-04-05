@@ -1,0 +1,8 @@
+../Core/Src/basic.c:16:6:InitBasic	8	static
+../Core/Src/basic.c:23:10:GetTick	8	static
+../Core/Src/basic.c:28:10:GetElapsedTick	24	static
+../Core/Src/basic.c:39:5:__io_putchar	16	static
+../Core/Src/basic.c:49:6:HAL_UART_RxCpltCallback	16	static
+../Core/Src/basic.c:62:10:GetUart1RxCount	4	static
+../Core/Src/basic.c:74:9:ReadUart1Byte	16	static
+../Core/Src/basic.c:81:6:WriteUart1Bytes	16	static

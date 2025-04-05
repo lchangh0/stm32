@@ -14,13 +14,14 @@
 #include "memory.h"
 
 
-
 extern CAN_HandleTypeDef hcan;
 extern SPI_HandleTypeDef hspi1;
 extern UART_HandleTypeDef huart1;
-
+extern ADC_HandleTypeDef hadc1;
+extern TIM_HandleTypeDef htim2;
 
 void InitBasic();
+uint32_t GetTick();
 uint32_t GetElapsedTick(uint32_t start);
 
 #endif /* INC_BASIC_H_ */

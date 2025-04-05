@@ -1,4 +1,4 @@
-Core/Src/work.o: ../Core/Src/work.c ../Core/Inc/work.h \
+Core/Src/work.o: ../Core/Src/work.c ../Core/Inc/work_rfid_pn532.h \
  ../Core/Inc/basic.h ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h \
  ../Core/Inc/stm32f1xx_hal_conf.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc.h \
@@ -19,15 +19,19 @@ Core/Src/work.o: ../Core/Src/work.c ../Core/Inc/work.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_dma_ex.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_can.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_cortex.h \
+ ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_adc.h \
+ ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_adc_ex.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash_ex.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_spi.h \
+ ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h \
+ ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h \
- ../Core/Inc/led.h ../Core/Inc/button.h ../Core/Inc/can.h \
- ../Core/Inc/spi1.h ../Core/Inc/pn532.h ../Core/Inc/pn532_stm32f1.h \
- ../Core/Inc/pn532.h
-../Core/Inc/work.h:
+ ../Core/Inc/work.h ../Core/Inc/led.h ../Core/Inc/button.h \
+ ../Core/Inc/can.h ../Core/Inc/pn532.h ../Core/Inc/pn532_stm32f1.h \
+ ../Core/Inc/pn532.h ../Core/Inc/work_buzzer.h ../Core/Inc/work_test.h
+../Core/Inc/work_rfid_pn532.h:
 ../Core/Inc/basic.h:
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h:
 ../Core/Inc/stm32f1xx_hal_conf.h:
@@ -49,15 +53,21 @@ Core/Src/work.o: ../Core/Src/work.c ../Core/Inc/work.h \
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_dma_ex.h:
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_can.h:
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_cortex.h:
+../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_adc.h:
+../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_adc_ex.h:
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash.h:
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash_ex.h:
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h:
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_spi.h:
+../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h:
+../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h:
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h:
+../Core/Inc/work.h:
 ../Core/Inc/led.h:
 ../Core/Inc/button.h:
 ../Core/Inc/can.h:
-../Core/Inc/spi1.h:
 ../Core/Inc/pn532.h:
 ../Core/Inc/pn532_stm32f1.h:
 ../Core/Inc/pn532.h:
+../Core/Inc/work_buzzer.h:
+../Core/Inc/work_test.h:

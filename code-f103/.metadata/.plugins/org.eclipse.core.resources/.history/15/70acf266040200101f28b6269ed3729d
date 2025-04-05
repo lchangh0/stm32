@@ -1,0 +1,25 @@
+/*
+ * work_buzzer.c
+ *
+ *  Created on: Mar 16, 2025
+ *      Author: user
+ */
+
+
+#include "work_buzzer.h"
+
+void InitWorkBuzzer()
+{}
+
+
+static uint32_t tm_buzzer;
+
+void DoWorkBuzzer()
+{
+	if (GetElapsedTick(tm_buzzer))
+	{
+		tm_buzzer = GetTick();
+
+
+	}
+}

@@ -12,13 +12,15 @@ C_SRCS += \
 ../Core/Src/main.c \
 ../Core/Src/pn532.c \
 ../Core/Src/pn532_stm32f1.c \
-../Core/Src/spi1.c \
 ../Core/Src/stm32f1xx_hal_msp.c \
 ../Core/Src/stm32f1xx_it.c \
 ../Core/Src/syscalls.c \
 ../Core/Src/sysmem.c \
 ../Core/Src/system_stm32f1xx.c \
-../Core/Src/work.c 
+../Core/Src/work.c \
+../Core/Src/work_buzzer.c \
+../Core/Src/work_rfid_pn532.c \
+../Core/Src/work_test.c 
 
 OBJS += \
 ./Core/Src/basic.o \
@@ -28,13 +30,15 @@ OBJS += \
 ./Core/Src/main.o \
 ./Core/Src/pn532.o \
 ./Core/Src/pn532_stm32f1.o \
-./Core/Src/spi1.o \
 ./Core/Src/stm32f1xx_hal_msp.o \
 ./Core/Src/stm32f1xx_it.o \
 ./Core/Src/syscalls.o \
 ./Core/Src/sysmem.o \
 ./Core/Src/system_stm32f1xx.o \
-./Core/Src/work.o 
+./Core/Src/work.o \
+./Core/Src/work_buzzer.o \
+./Core/Src/work_rfid_pn532.o \
+./Core/Src/work_test.o 
 
 C_DEPS += \
 ./Core/Src/basic.d \
@@ -44,13 +48,15 @@ C_DEPS += \
 ./Core/Src/main.d \
 ./Core/Src/pn532.d \
 ./Core/Src/pn532_stm32f1.d \
-./Core/Src/spi1.d \
 ./Core/Src/stm32f1xx_hal_msp.d \
 ./Core/Src/stm32f1xx_it.d \
 ./Core/Src/syscalls.d \
 ./Core/Src/sysmem.d \
 ./Core/Src/system_stm32f1xx.d \
-./Core/Src/work.d 
+./Core/Src/work.d \
+./Core/Src/work_buzzer.d \
+./Core/Src/work_rfid_pn532.d \
+./Core/Src/work_test.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
@@ -60,7 +66,7 @@ Core/Src/%.o Core/Src/%.su Core/Src/%.cyclo: ../Core/Src/%.c Core/Src/subdir.mk
 clean: clean-Core-2f-Src
 
 clean-Core-2f-Src:
-	-$(RM) ./Core/Src/basic.cyclo ./Core/Src/basic.d ./Core/Src/basic.o ./Core/Src/basic.su ./Core/Src/button.cyclo ./Core/Src/button.d ./Core/Src/button.o ./Core/Src/button.su ./Core/Src/can.cyclo ./Core/Src/can.d ./Core/Src/can.o ./Core/Src/can.su ./Core/Src/led.cyclo ./Core/Src/led.d ./Core/Src/led.o ./Core/Src/led.su ./Core/Src/main.cyclo ./Core/Src/main.d ./Core/Src/main.o ./Core/Src/main.su ./Core/Src/pn532.cyclo ./Core/Src/pn532.d ./Core/Src/pn532.o ./Core/Src/pn532.su ./Core/Src/pn532_stm32f1.cyclo ./Core/Src/pn532_stm32f1.d ./Core/Src/pn532_stm32f1.o ./Core/Src/pn532_stm32f1.su ./Core/Src/spi1.cyclo ./Core/Src/spi1.d ./Core/Src/spi1.o ./Core/Src/spi1.su ./Core/Src/stm32f1xx_hal_msp.cyclo ./Core/Src/stm32f1xx_hal_msp.d ./Core/Src/stm32f1xx_hal_msp.o ./Core/Src/stm32f1xx_hal_msp.su ./Core/Src/stm32f1xx_it.cyclo ./Core/Src/stm32f1xx_it.d ./Core/Src/stm32f1xx_it.o ./Core/Src/stm32f1xx_it.su ./Core/Src/syscalls.cyclo ./Core/Src/syscalls.d ./Core/Src/syscalls.o ./Core/Src/syscalls.su ./Core/Src/sysmem.cyclo ./Core/Src/sysmem.d ./Core/Src/sysmem.o ./Core/Src/sysmem.su ./Core/Src/system_stm32f1xx.cyclo ./Core/Src/system_stm32f1xx.d ./Core/Src/system_stm32f1xx.o ./Core/Src/system_stm32f1xx.su ./Core/Src/work.cyclo ./Core/Src/work.d ./Core/Src/work.o ./Core/Src/work.su
+	-$(RM) ./Core/Src/basic.cyclo ./Core/Src/basic.d ./Core/Src/basic.o ./Core/Src/basic.su ./Core/Src/button.cyclo ./Core/Src/button.d ./Core/Src/button.o ./Core/Src/button.su ./Core/Src/can.cyclo ./Core/Src/can.d ./Core/Src/can.o ./Core/Src/can.su ./Core/Src/led.cyclo ./Core/Src/led.d ./Core/Src/led.o ./Core/Src/led.su ./Core/Src/main.cyclo ./Core/Src/main.d ./Core/Src/main.o ./Core/Src/main.su ./Core/Src/pn532.cyclo ./Core/Src/pn532.d ./Core/Src/pn532.o ./Core/Src/pn532.su ./Core/Src/pn532_stm32f1.cyclo ./Core/Src/pn532_stm32f1.d ./Core/Src/pn532_stm32f1.o ./Core/Src/pn532_stm32f1.su ./Core/Src/stm32f1xx_hal_msp.cyclo ./Core/Src/stm32f1xx_hal_msp.d ./Core/Src/stm32f1xx_hal_msp.o ./Core/Src/stm32f1xx_hal_msp.su ./Core/Src/stm32f1xx_it.cyclo ./Core/Src/stm32f1xx_it.d ./Core/Src/stm32f1xx_it.o ./Core/Src/stm32f1xx_it.su ./Core/Src/syscalls.cyclo ./Core/Src/syscalls.d ./Core/Src/syscalls.o ./Core/Src/syscalls.su ./Core/Src/sysmem.cyclo ./Core/Src/sysmem.d ./Core/Src/sysmem.o ./Core/Src/sysmem.su ./Core/Src/system_stm32f1xx.cyclo ./Core/Src/system_stm32f1xx.d ./Core/Src/system_stm32f1xx.o ./Core/Src/system_stm32f1xx.su ./Core/Src/work.cyclo ./Core/Src/work.d ./Core/Src/work.o ./Core/Src/work.su ./Core/Src/work_buzzer.cyclo ./Core/Src/work_buzzer.d ./Core/Src/work_buzzer.o ./Core/Src/work_buzzer.su ./Core/Src/work_rfid_pn532.cyclo ./Core/Src/work_rfid_pn532.d ./Core/Src/work_rfid_pn532.o ./Core/Src/work_rfid_pn532.su ./Core/Src/work_test.cyclo ./Core/Src/work_test.d ./Core/Src/work_test.o ./Core/Src/work_test.su
 
 .PHONY: clean-Core-2f-Src
 
